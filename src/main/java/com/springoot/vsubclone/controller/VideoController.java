@@ -7,9 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/api")
 public class VideoController {
@@ -29,15 +33,25 @@ public class VideoController {
         String script = openAIService.generateScript(prompt);
         logger.info("Generated script: " + script);
 
-        String videoUrl = createVideoFromScript(script);
-        logger.info("Video URL: " + videoUrl);
+        String videoPath = createVideoFromScript(script);
+        logger.info("Video Path: " + videoPath);
 
-        return ResponseEntity.ok(videoUrl);
+        return ResponseEntity.ok(videoPath);
     }
 
     private String createVideoFromScript(String script) {
         // Placeholder for video creation logic
-        return "path/to/generated/video.mp4";
+        String videoFileName = "generated_video.mp4";
+        Path videoPath = Paths.get("uploads/" + videoFileName);
+
+        try {
+            Files.createDirectories(videoPath.getParent());
+            Files.write(videoPath, script.getBytes()); // This should be replaced with actual video creation logic
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return videoPath.toString();
     }
 }
 
