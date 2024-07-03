@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/file")
 public class FileUploadController {
 
     @PostMapping("/upload_video")
