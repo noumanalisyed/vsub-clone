@@ -59,7 +59,7 @@ public class VideoGenerationService {
         StringBuilder extractedText = new StringBuilder();
         for (String line : script.split("\n")) {
             if (line.startsWith("[")) {
-                extractedText.append(line).append("\n");
+                extractedText.append(line).append(",");
             }
         }
         //save text to a file named img-prompts.txt
@@ -121,7 +121,8 @@ public class VideoGenerationService {
         java.nio.file.Files.writeString(scriptFile.toPath(), scriptText);
 
         File videoFile = new File("generated_video.mp4");
-        String ffmpegCommand = String.format(" C:/Users/raahi/anaconda3/envs/ffmpeg-env/Library/bin/ffmpeg -f lavfi -i color=c=blue:s=480x720:d=10 -vf \"drawtext=fontfile=/path/to/font.ttf: textfile=script.txt: fontsize=8: fontcolor=white: x=(w-text_w)/2: y=(h-text_h)/2\" -y %s",
+        //use the generated_imagepng to create a video with the script text
+        String ffmpegCommand = String.format("C:/Users/raahi/anaconda3/envs/ffmpeg-env/Library/bin/ffmpeg -loop 1 -i generated_image.png -t 10 -vf \"drawtext=fontfile=/path/to/font.ttf: textfile=script.txt: fontsize=8: fontcolor=white: x=(w-text_w)/2: y=(h-text_h)/2\" -y %s",
               videoFile.getAbsolutePath());
 
         ProcessBuilder processBuilder = new ProcessBuilder("sh", "-c", ffmpegCommand);
