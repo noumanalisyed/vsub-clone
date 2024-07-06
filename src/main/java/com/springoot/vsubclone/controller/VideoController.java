@@ -22,12 +22,13 @@ public class VideoController {
     @PostMapping("/generate_video")
     public VideoResponse generateVideo(@RequestBody PromptRequest request) {
         try {
-            //print request prompt
             System.out.println(request.getPrompt());
             String script = videoGenerationService.generateScriptFromPrompt(request.getPrompt());
-            String img_prompt = videoGenerationService.extractTextFromScript(script);
+            String img_prompt= videoGenerationService.extractFromScript(script);
+            String voiceover_path = videoGenerationService.generateVoiceOverFromScript();
             String img_path = videoGenerationService.generateImageFromScript(img_prompt);
             System.out.println("img generated at: " + img_path);
+            System.out.println("voice-over generated at: " + voiceover_path);
             String videoPath = videoGenerationService.generateVideoFromScript(script);
             return new VideoResponse(videoPath);
         } catch (IOException e) {
